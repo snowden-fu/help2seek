@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Help 2 Seek",
+  "description": "AI powered Chrome extension for Seek a job",
+  "version": "1.0",
+  "permissions": ["sidePanel"],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}
