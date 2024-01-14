@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "name": "Deploy Cloud Function",
+      "type": "cloudcode.cloudfunctions",
+      "request": "launch",
+      "functionName": "fetch_seek_job_details",
+      "region": "australia-southeast1",
+      "gen": "GEN_2",
+      "revision": "fetch-seek-job-details-00005-gol",
+      "entryPoint": "fetch_seek_job_details",
+      "runtime": "python312",
+      "testInput": ""
+    }
+  ]
+}
