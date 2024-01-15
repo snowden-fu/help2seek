@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "name": "Deploy Cloud Function",
+      "type": "cloudcode.cloudfunctions",
+      "request": "launch",
+      "functionName": "pdf2txt",
+      "region": "australia-southeast1",
+      "gen": "GEN_2",
+      "revision": "pdf2txt-00001-hop",
+      "entryPoint": "pdf2txt",
+      "runtime": "python311",
+      "testInput": ""
+    }
+  ]
+}
