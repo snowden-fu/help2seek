@@ -25,6 +25,7 @@ proto-plus==1.23.0
 protobuf==4.25.2
 pyasn1==0.5.1
 pyasn1-modules==0.3.0
+pypdf==3.17.4
 requests==2.31.0
 rsa==4.9
 soupsieve==2.5

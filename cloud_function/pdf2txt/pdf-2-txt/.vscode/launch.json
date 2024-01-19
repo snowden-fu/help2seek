@@ -7,9 +7,9 @@
       "functionName": "pdf2txt",
       "region": "australia-southeast1",
       "gen": "GEN_2",
-      "revision": "pdf2txt-00002-rek",
+      "revision": "pdf2txt-00006-huw",
       "entryPoint": "pdf2txt",
-      "runtime": "python311",
+      "runtime": "python312",
       "testInput": ""
     }
   ]

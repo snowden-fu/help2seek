@@ -1,29 +1,25 @@
 import functions_framework
-from google.cloud import vision
+from pypdf import PdfReader
 @functions_framework.http
 def pdf2txt(request):
-    # Check if the post request has the file part
-    if 'file' not in request.files:
-        return 'No file part in the request'
-
-    file = request.files['file']
-
-    # If the user does not select a file, the browser submits an
-    # empty file without a filename.
-    if file.filename == '':
-        return 'No selected file'
-    client = vision.ImageAnnotatorClient()
-    if file:
-        # Process the file here
-        file_content = file.read()
-        vision_image = vision.Image(content=file_content)
-        response = client.document_text_detection(image=vision_image)
-        texts = response.text_annotations
-        print('Texts:')
-        for text in texts:
-            print('\n"{}"'.format(text.description))
-            vertices = (['({},{})'.format(vertex.x, vertex.y)
-                        for vertex in text.bounding_poly.vertices])
-            print('bounds: {}'.format(','.join(vertices)))
-
-        return 'File and JSON data received'
+    '''
+    this function is to extract text from pdf file,
+    first get pdf from request,
+    then save pdf to google cloud storage,
+    then read pdf from google cloud storage, 
+    then extract text from pdf file, 
+    finally return the extracted text.
+    '''
+    # 1. get pdf from request
+    resume_pdf = request.files['resume']
+    # 2. save pdf to google cloud storage
+    resume_pdf.save('/tmp/resume.pdf')
+    # 3. read pdf from google cloud storage
+    resume_pdf = PdfReader('/tmp/resume.pdf')
+    # 4. extract text from pdf file
+    resume_txt = ''
+    for page in resume_pdf.pages:
+        resume_txt += page.extract_text()
+    resume_txt = resume_txt.replace('\n', ' ')
+    # 5. return the extracted text in json format
+    return {'resume_txt': resume_txt}
