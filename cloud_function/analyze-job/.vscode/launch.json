@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "name": "Deploy Cloud Function",
+      "type": "cloudcode.cloudfunctions",
+      "request": "launch",
+      "functionName": "analyze_job",
+      "region": "australia-southeast1",
+      "gen": "GEN_2",
+      "revision": "analyze-job-00005-sef",
+      "entryPoint": "analyze_job",
+      "runtime": "python312",
+      "testInput": ""
+    }
+  ]
+}
