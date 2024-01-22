@@ -1,5 +1,4 @@
 import functions_framework
-from google.cloud import secretmanager
 import openai
 import os
 @functions_framework.http
@@ -7,8 +6,7 @@ def analyze_job(request):
     # 1. get openai key from secret manager
     secret_name = os.getenv("SECRET_NAME")
     project_id = os.getenv("PROJECT_ID")
-    get_secret_response = get_secret(project_id, secret_name)
-    openai_key = get_secret_response
+    openai_key = get_secret_data(project_id, secret_name)
     request_data = request.get_json()
     job_desc = request_data['job_desc']
     resume_text = request_data['resume_text']
@@ -17,7 +15,7 @@ def analyze_job(request):
     # get resume from request
     # resume_text = request.args.get('resume')
     # call openai api
-    client = openai.Client(openai_key)
+    client = openai.Client(api_key=openai_key)
     response = client.chat.completions.create(
   model="gpt-3.5-turbo-1106",
   response_format={ "type": "json_object" },
@@ -62,34 +60,16 @@ def analyze_job(request):
     }
   ]
 )
-    return response
+    return response.choices[0].message.content
 
-
-def get_secret(project_id: str, secret_id: str) -> secretmanager.GetSecretRequest:
-    """
-    Get information about the given secret. This only returns metadata about
-    the secret container, not any secret material.
-    """
-
+def get_secret_data(project_id, secret_id):
     # Import the Secret Manager client library.
     from google.cloud import secretmanager
-
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
-
-    # Build the resource name of the secret.
-    name = client.secret_path(project_id, secret_id)
-
-    # Get the secret.
-    response = client.get_secret(request={"name": name})
-
-    # Get the replication policy.
-    if "automatic" in response.replication:
-        replication = "AUTOMATIC"
-    elif "user_managed" in response.replication:
-        replication = "MANAGED"
-    else:
-        raise Exception(f"Unknown replication {response.replication}")
-
-    # return data about the secret.
-    return replication
+    # Build the resource name of the secret version.
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
+    # Access the secret version.
+    response = client.access_secret_version(request={"name": name})
+    # Return the decoded payload.
+    return response.payload.data.decode("UTF-8")

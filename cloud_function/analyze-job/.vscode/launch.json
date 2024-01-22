@@ -7,7 +7,7 @@
       "functionName": "analyze_job",
       "region": "australia-southeast1",
       "gen": "GEN_2",
-      "revision": "analyze-job-00005-sef",
+      "revision": "analyze-job-00009-kis",
       "entryPoint": "analyze_job",
       "runtime": "python312",
       "testInput": ""
