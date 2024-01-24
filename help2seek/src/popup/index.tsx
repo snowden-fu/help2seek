@@ -1,5 +1,5 @@
 import React from "react"
-
+import "../style.css"
 const IndexPopUp: React.FC = () => {
   return (
     <div>
@@ -13,7 +13,7 @@ const IndexPopUp: React.FC = () => {
       </svg>
 
       {/* button to upload resume */}
-      <input type="file"/>
+      <button className="btn btn-primary">Button</button>
     </div>
   )
 }
