@@ -67,3 +67,22 @@ function analyze_job_detail(resume:string, job_detail:string) {
       console.log(err)
     })
 }
+const url_pattern = /https:\/\/www.seek.com.au\/job\/.*/
+function checkTabURL(tabId: number) {
+  chrome.tabs.get(tabId, (tab) => {
+    if (tab.url && url_pattern.test(tab.url)) {
+      console.log("URL matches the pattern:", tab.url);
+      // Add any additional logic here
+    }
+  });
+}
+
+chrome.tabs.onActivated.addListener(activeInfo => {
+  checkTabURL(activeInfo.tabId);
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete') {
+    checkTabURL(tabId);
+  }
+});
