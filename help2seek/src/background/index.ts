@@ -1,3 +1,5 @@
+import { json } from 'stream/consumers'
+
 export {}
  
 console.log(
@@ -30,19 +32,17 @@ function uploadResume(resume:File) {
  */
 function get_job_detail(url:string) {
   console.log(`get_job_detail url ${url}`)
-  const api_url = process.env.JOB_DETAIL_API
+  const api_url = "https://australia-southeast1-help2seek.cloudfunctions.net/fetch_seek_job_details"
   console.log(`api_url ${api_url}`)
   fetch(api_url, {
     method: "POST",
-    body: JSON.stringify({ url: url })
+    body: JSON.stringify({ job_url: url }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => {
+    console.log(res.json())
   })
-    .then(res => res.json())
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err)
-    })
 }
 
 
@@ -73,6 +73,7 @@ function checkTabURL(tabId: number) {
     if (tab.url && url_pattern.test(tab.url)) {
       console.log("URL matches the pattern:", tab.url);
       // Add any additional logic here
+      get_job_detail(tab.url)
     }
   });
 }
