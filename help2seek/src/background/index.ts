@@ -13,7 +13,10 @@ function uploadResume(resume: File) {
   console.log(`api_url ${api_url}`)
   fetch(api_url, {
     method: "POST",
-    body: formData
+    body: formData,
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
   })
     .then((res) => res.json())
     .then((res) => {
@@ -74,10 +77,16 @@ function checkTabURL(tabId: number) {
       })
       .then(data=>{
         console.log(data["job_desc"]);
-        // if resume text is in storage
+        // get resime text from local storage
+        chrome.storage.local.get(['resume_text'], function(result) {
+          console.log('Value currently is ' + result.key);
+        });
+        // if resume text is in global storage
+        // call analyze_job_detail
         // get resume text out of storage
         // call analyze_job_detail
-      })
+      }
+      )
     }
   })
 }
