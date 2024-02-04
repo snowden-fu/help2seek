@@ -1,6 +1,7 @@
 import functions_framework
 import openai
 import os
+import json
 @functions_framework.http
 def analyze_job(request):
     # 1. get openai key from secret manager
@@ -60,7 +61,7 @@ def analyze_job(request):
     }
   ]
 )
-    return response.choices[0].message.content
+    return json.loads(response.choices[0].message.content)
 
 def get_secret_data(project_id, secret_id):
     # Import the Secret Manager client library.

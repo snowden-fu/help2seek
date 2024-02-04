@@ -36,7 +36,6 @@ function get_job_detail(url: string) {
   console.log(`get_job_detail url ${url}`)
   const api_url =
     "https://australia-southeast1-help2seek.cloudfunctions.net/fetch_seek_job_details"
-  console.log(`api_url ${api_url}`)
   return fetch(api_url, {
     method: "POST",
     body: JSON.stringify({ job_url: url }),
@@ -53,19 +52,15 @@ function get_job_detail(url: string) {
  * @param job_detail job detail text parsed from seek job detail page, saved in session storage
  */
 function analyze_job_detail(resume: string, job_detail: string) {
-  const api_url = process.env.JOB_ANALYSIS_API
-  console.log(`api_url ${api_url}`)
-  fetch(api_url, {
+  const api_url = "https://australia-southeast1-help2seek.cloudfunctions.net/analyze_job"
+  console.log(`analyze_job_detail api_url ${api_url}`)
+  return fetch(api_url, {
     method: "POST",
-    body: JSON.stringify({ resume_text: resume, job_desc: job_detail })
+    body: JSON.stringify({ resume_text: resume, job_desc: job_detail }),
+    headers: {
+      "Content-Type": "application/json"
+    }
   })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
 }
 const url_pattern = /https:\/\/www.seek.com.au\/job\/.*/
 function checkTabURL(tabId: number) {
@@ -76,10 +71,19 @@ function checkTabURL(tabId: number) {
         return res.json()
       })
       .then(data=>{
-        console.log(data["job_desc"]);
+        console.log(`job detail: ${data["job_desc"]}`);
         // get resime text from local storage
-        chrome.storage.local.get(['resume_text'], function(result) {
-          console.log('Value currently is ' + result.key);
+        chrome.storage.local.get('resume_txt', function(result) {
+          if (result.resume_txt!== undefined){
+            console.log('Value currently is ' + result.resume_txt);
+            analyze_job_detail(result.resume_txt, data["job_desc"])
+            .then((res) => {
+              return res.json()
+            }
+            )
+          } else {
+            console.log('Value is undefined');
+          }
         });
         // if resume text is in global storage
         // call analyze_job_detail

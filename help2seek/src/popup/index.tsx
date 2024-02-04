@@ -24,8 +24,8 @@ const IndexPopUp: React.FC = () => {
           console.log("File uploaded successfully!")
           const data = await response.json()
           console.log(data['resume_txt'])
-          chrome.storage.sync.set({'resume_txt': data['resume_txt']}, function() {
-            console.log('Value is set to ' + data['resume_txt']);
+          chrome.storage.local.set({'resume_txt': data['resume_txt']}, function() {
+            console.log('Value "resume_txt" is set');
           });
         }
       } catch (error) {
